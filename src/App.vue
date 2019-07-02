@@ -42,6 +42,15 @@
       <p>（验证EOS私钥格式）</p>
     </div>
 
+    <div style="margin-top: 20px;">
+      <div>
+        <input type="text" v-model="tobeDerivePrivateKey">
+        <button class="primary" @click="derivePrivateKey">从私钥推导公钥</button>
+      </div>
+      <p v-if="showDerivedPublicTips"><span>推导的公钥：</span>{{ derivedPublicKey }}</p>
+      <p>（从私钥推导公钥）</p>
+    </div>
+
     <div class="dialog" v-if="showDialog">
       <div class="dialog-container">
         <div class="dialog-header">
@@ -76,10 +85,13 @@ export default {
       seed: '',
       valiPublicKey: '',
       valiPrivateKey: '',
+      tobeDerivePrivateKey: '',
       valiPublicStatus: false,
       valiPrivateStatus: false,
       showPublicTips: false,
       showPrivateTips: false,
+      showDerivedPublicTips: false,
+      derivedPublicKey: '',
 
       // dialog
       showDialog: false
@@ -109,6 +121,10 @@ export default {
     isValidPrivate () {
       this.showPrivateTips = true
       this.valiPrivateStatus = ecc.isValidPrivate(this.valiPrivateKey)
+    },
+    derivePrivateKey () {
+      this.showDerivedPublicTips = true
+      this.derivedPublicKey = ecc.privateToPublic(this.tobeDerivePrivateKey)
     }
   }
 }
